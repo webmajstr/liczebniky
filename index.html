@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Liczebniky</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    </head>
+    <body>
+
+        <div>
+            <h1>Liczebniky</h1>
+            <input type="text" id="inputVal"/><br>
+            <button id="btn1">Generate</button>
+        </div>
+        <div id="other"></div>
+        <div id="resultDiv"></div>
+        <script src="js/jquery-2.1.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+
+            function getProcessedSentence(value, callback) {
+
+                $.ajax({
+                    url: "http://127.0.0.1:1337/" + value,
+                    type: "GET",
+                  //  datatype: "jsonp",
+                   // cache: false,
+                    success: function(data) {
+                   //     console.log(data);
+                        $("#resultDiv").html(data.result);
+                        
+                        callback();   
+                    },
+                    error: function (xhr, status, err) {
+                        console.log(xhr);
+                        console.log(status);
+                        console.log(err);
+                        $("#resultDiv").html("An error ocurred");
+                        callback();
+                    }
+                });
+            };
+
+
+            $(document).ready(function() {
+                $("#btn1").click(function() {
+                    if ($("#inputVal").prop("value") !== "") {
+                        //
+                        $("#resultDiv").html("Loading...");
+                        $("#btn1").attr("disabled", "disabled");
+    
+
+                            getProcessedSentence($("#inputVal").prop("value"), function(){
+                                $("#btn1").removeAttr("disabled");        
+                            });
+
+
+                        
+
+
+                    } else {
+                        $("#resultDiv").html('No value to search. Please fill in the text input and press "Generate" button')
+                    }
+                });
+            });
+
+
+        </script>
+    </body>
+</html>
